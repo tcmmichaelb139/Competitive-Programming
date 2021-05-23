@@ -46,57 +46,70 @@ void IO(string s = "") {
     }
 }
 
-bool ar[4002][4002];
-bool vis[4002][4002];
-int sx = 4000, sy = 4000, lx = 0, ly = 0;
+int n;
+string s;
+bool ar[4004][4004];
+bool vis[4004][4004];
+int sx = IMX, sy = IMX, lx = -1, ly = -1;
 
-void ff(int x, int y) {
-    if (x < sx || y < sy || x > lx || y > ly) return;
-    if (vis[x][y]) return;
-    if (ar[x][y]) return;
-    vis[x][y] = true;
-    ff(x+1, y);
-    ff(x-1, y);
-    ff(x, y+1);
-    ff(x, y-1);
+void ff(int i, int j) {
+    if (i < sx-1 || i > lx+1 || j < sy-1 || j > ly+1) return;
+    if (vis[i][j]) return;
+    if (ar[i][j]) return;
+    vis[i][j] = true;
+    ff(i+1, j);
+    ff(i-1, j);
+    ff(i, j+1);
+    ff(i, j-1);
 }
 
 int main() {
     IO("gates");
 
-    int n;
-    cin >> n;
-    string s;
-    cin >> s;
-    int currx = 1001, curry = 1001;
-    ar[currx][curry] = true;
+    cin >> n >> s;
+    int x = 2002, y = 2002;
+    ar[x][y] = true;
     for (int i = 0; i < n; i++) {
-        int x = 0, y = 0;
-        if (s[i] == 'N') y = 1;
-        if (s[i] == 'E') x = 1;
-        if (s[i] == 'S') y = -1;
-        if (s[i] == 'W') x = -1;
-        for (int i = 0; i < 2; i++) {
-            currx += x;
-            curry += y;
-            ar[currx][curry] = true;
-        }
-        sx = min(sx, currx);
-        lx = max(lx, currx);
-        sy = min(sy, curry);
-        ly = max(ly, curry);
+        if (s[i] == 'N')
+            x++;
+        else if (s[i] == 'E')
+            y++;
+        else if (s[i] == 'S')
+            x--;
+        else 
+            y--;
+        ar[x][y] = true;
+        if (s[i] == 'N')
+            x++;
+        else if (s[i] == 'E')
+            y++;
+        else if (s[i] == 'S')
+            x--;
+        else 
+            y--;
+        ar[x][y] = true;
+        sx = min(sx, x);
+        lx = max(lx, x);
+        sy = min(sy, y);
+        ly = max(ly, y);
     }
+    /* for (int i = sx-1; i < lx+2; i++) { */
+    /*     for (int j = sy-1; j < ly+2; j++) { */
+    /*         if (ar[i][j]) cout << 1; */
+    /*         else cout << 0; */
+    /*     } */
+    /*     cout << '\n'; */
+    /* } */
+    /* cout << sx << ' ' << lx << ' ' << sy << ' ' << ly << '\n'; */
     int ans = 0;
-    sx--;
-    sy--;
-    lx++;
-    ly++;
-    for (int i = sx; i <= lx; i++) {
-        for (int j = sy; j <= ly; j++) {
-            if (vis[i][j] || ar[i][j]) continue;
+    for (int i = sx-1; i < lx+2; i++) {
+        for (int j = sy-1; j < ly+2; j++) {
+            if (vis[i][j]) continue;
+            if (ar[i][j]) continue;
+            /* cout << i << ' ' << j << '\n'; */
             ff(i, j);
             ans++;
         }
     }
-    cout << max(0, ans-1) << '\n';
+    cout << ans-1 << '\n';
 }
