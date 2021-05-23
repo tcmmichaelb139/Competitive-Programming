@@ -73,7 +73,6 @@ void perimeter(int i, int j) {
     if (g[i][j+1] == '.' || j == n-1) per++;
     if (g[i][j-1] == '.' || j == 0) per++;
     vis[i][j] = true;
-    /* cout << per << ' ' << i << ' ' << j << '\n'; */
     perimeter(i+1, j);
     perimeter(i-1, j);
     perimeter(i, j+1);
@@ -108,7 +107,6 @@ int main() {
             }
         }
     }
-    /* cout << cor.f << ' ' << cor.s << '\n'; */
     memset(vis, false, sizeof(vis));
     int pans = IMX;
     for (int i = 0; i < v.sz(); i++) {
