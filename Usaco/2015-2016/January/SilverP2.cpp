@@ -4,7 +4,6 @@ using namespace std;
 
 typedef long long ll;
 typedef long double ld;
-typedef string str;
 
 typedef pair<int, int> pi;
 typedef pair<ll, ll> pl;
@@ -32,11 +31,8 @@ typedef vector<pd> vpd;
 
 #define f first
 #define s second
-#define mp make_pair
 
 #define ln length
-#define IMX INT_MAX
-#define IMN INT_MIN
 
 void IO(string s = "") {
     ios_base::sync_with_stdio(0); cin.tie(0); 
@@ -47,38 +43,24 @@ void IO(string s = "") {
 }
 
 int main() {
-    IO("angry");
+    IO("div7");
 
-    int n, k;
-    cin >> n >> k;
-    vi v(n);
+    int n;
+    cin >> n;
+    vi ar(n+1);
+    int ans = 0;
+    vi ok(7, -1);
+    ok[0] = 0;
     for (int i = 0; i < n; i++) {
-        cin >> v[i];
-    }
-    sort(all(v));
-    int l = 0, r = IMX;
-    while (l <= r) {
-        int mid = l+(r-l)/2;
-        int used = 0;
-        int currsize = 0;
-        int prev = 0;
-        for (int i = 0; i < n; i++) {
-            if (!i) {
-                prev = v[i];
-                continue;
-            }
-            currsize += v[i]-prev;
-            if (currsize > mid*2) {
-                currsize = 0;
-                prev = v[i];
-                used++;
-            }
-            //cout << currsize << '\n';
-            prev = v[i];
+        int e;
+        cin >> e;
+        ar[i] = (ar[i-1]+e)%7;
+        if (ok[ar[i]] == -1) {
+            ok[ar[i]] = i;
         }
-        used++;
-        if (used <= k) r = mid-1;
-        else l = mid+1;
+        else {
+            ans = max(ans, i-ok[ar[i]]);
+        }
     }
-    cout << l << '\n';
+    cout << ans << '\n';
 }
