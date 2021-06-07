@@ -51,28 +51,42 @@ int main() {
 
     int n, k;
     cin >> n >> k;
-    vi v;
+    vi v(n);
     for (int i = 0; i < n; i++) {
-        int e;
-        cin >> e;
-        v.pb(e);
+        cin >> v[i];
     }
     sort(all(v));
-    int mn = 0, mx = IMX;
-    while (mn != mx) {
-        int mid = mn + (mx-mn)/2;
-        int us = 0;
-        int la = 0;
-        while (la < n) {
-            us++;
-            int curr = la+1;
-            while (curr < n && v[curr]-v[la] <= 2*mid) {
-                curr++;
+    int l = 0, r = IMX;
+    while (l <= r) {
+        int mid = l+(r-l)/2;
+        int used = 0;
+        int currsize = 0;
+        int prev = 0;
+        for (int i = 0; i < n; i++) {
+            if (!i) {
+                prev = v[i];
+                continue;
             }
-            la = curr;
+            currsize += v[i]-prev;
+            if (currsize > mid*2) {
+                currsize = 0;
+                prev = v[i];
+                used++;
+            }
+            //cout << currsize << '\n';
+            prev = v[i];
         }
-        if (us <= k) mx = mid;
-        else mn = mid+1;
+        used++;
+        if (used <= k) r = mid-1;
+        else l = mid+1;
     }
-    cout << mn << '\n';
+    cout << l << '\n';
 }
+
+/* Stuff to look for
+ * int overflow, array bounds
+ * special cases (n=1)
+ * do smth instead of nothing and stay organized
+ * WRITE STUFF DOWN
+ * DON'T GET STUCK ON ONE APPROACH
+ */
