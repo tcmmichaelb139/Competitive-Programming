@@ -1,9 +1,11 @@
 #include <bits/stdc++.h>
+#include <utility>
 
 using namespace std;
 
 typedef long long ll;
 typedef long double ld;
+typedef string str;
 
 typedef pair<int, int> pi;
 typedef pair<ll, ll> pl;
@@ -31,8 +33,11 @@ typedef vector<pd> vpd;
 
 #define f first
 #define s second
+#define mp make_pair
 
 #define ln length
+#define IMX INT_MAX
+#define IMN INT_MIN
 
 void IO(string s = "") {
     ios_base::sync_with_stdio(0); cin.tie(0); 
@@ -47,20 +52,22 @@ int main() {
 
     int n;
     cin >> n;
-    vi ar(n+1);
-    int ans = 0;
-    vi ok(7, -1);
-    ok[0] = 0;
-    for (int i = 0; i < n; i++) {
+    vi psum(n+1, 0);
+    vpi v(n, {-1, -1});
+    map<int, int> m;
+    for (int i = 1; i <= n; i++) {
         int e;
         cin >> e;
-        ar[i] = (ar[i-1]+e)%7;
-        if (ok[ar[i]] == -1) {
-            ok[ar[i]] = i;
-        }
-        else {
-            ans = max(ans, i-ok[ar[i]]);
-        }
+        psum[i] = (psum[i-1]+e)%7;
+        if (v[psum[i]].f == -1) 
+            v[psum[i]].f = i;
+        else 
+            v[psum[i]].s = i;
+    }
+    int ans = 0;
+    for (int i = 0; i < n; i++) {
+        ans = max(ans, v[i].s-v[i].f);
     }
     cout << ans << '\n';
 }
+
