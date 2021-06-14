@@ -47,7 +47,7 @@ void IO(string s = "") {
 }
 
 int main() {
-    IO("");
+    IO("cowjog");
 
     int n;
     cin >> n;
