@@ -1,15 +1,15 @@
 #include <bits/stdc++.h>
-
+ 
 using namespace std;
-
+ 
 typedef long long ll;
 typedef long double ld;
 typedef string str;
-
+ 
 typedef pair<int, int> pi;
 typedef pair<ll, ll> pl;
 typedef pair<double, double> pd;
-
+ 
 typedef vector<int> vi;
 typedef vector<bool> vb;
 typedef vector<ll> vl;
@@ -18,7 +18,7 @@ typedef vector<string> vs;
 typedef vector<pi> vpi;
 typedef vector<pl> vpl;
 typedef vector<pd> vpd;
-
+ 
 #define vc vector
 #define pb push_back
 #define pf push_front
@@ -26,44 +26,51 @@ typedef vector<pd> vpd;
 #define sz size
 #define all(x) x.begin(), x.end()
 #define rall(x) x.rbegin(), x.rend()
-
+ 
 #define ub upper_bound
 #define lb lower_bound
-
+ 
 #define f first
 #define s second
-
+ 
 #define ln length
 #define IMX INT_MAX
 #define IMN INT_MIN
-
+ 
 void IO(string s = "") {
-	ios_base::sync_with_stdio(0); cin.tie(0); 
-	if (s.length()) {
-		freopen((s+".in").c_str(),"r",stdin);
-		freopen((s+".out").c_str(),"w",stdout);
-	}
+    ios_base::sync_with_stdio(0); cin.tie(0); 
+    if (s.length()) {
+        freopen((s+".in").c_str(),"r",stdin);
+        freopen((s+".out").c_str(),"w",stdout);
+    }
 }
-
+ 
 int main() {
-	IO("");
-
-	int n;
-	cin >> n;
-	vl v(n);
-	for (int i = 0; i < n; i++) cin >> v[i];
-
-	ll s, ms;
-	for (int i = 0; i < n; i++) {
-		if (i == 0) {
-			s = v[i];
-			ms = s;
-		}
-		else {
-			s = max(s+v[i], v[i]);
-			ms = max(s, ms);
-		}
-	}
-	cout << ms << '\n';
+    IO("");
+ 
+    int n;
+    cin >> n;
+    vl v(n);
+    for (int i = 0; i < n; i++) cin >> v[i];
+ 
+    ll s, ms;
+    for (int i = 0; i < n; i++) {
+        if (i == 0) {
+            s = v[i];
+            ms = s;
+        }
+        else {
+            s = max(s+v[i], v[i]);
+            ms = max(s, ms);
+        }
+    }
+    cout << ms << '\n';
 }
-
+ 
+/* Stuff to look for
+ * int overflow, array bounds
+ * special cases (n=1)
+ * do smth instead of nothing and stay organized
+ * WRITE STUFF DOWN
+ * DON'T GET STUCK ON ONE APPROACH
+ */
