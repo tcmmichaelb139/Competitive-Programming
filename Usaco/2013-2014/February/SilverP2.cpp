@@ -52,9 +52,7 @@ int main() {
 
     int n, m;
     cin >> n >> m;
-    /* vpi v[n+1]; */
     vc<vpl> v(n+1);
-    /* ll ar[n+1][n+1]; */
     vc<vl> ar(n+1, vl(n+1, IMX));
     for (int i = 0; i < m; i++) {
         ll a, b, w;
@@ -139,7 +137,6 @@ int main() {
         ss = max(tmp, ss);
     }
     cout << ss-fs << '\n';
-    /* cout << ss << ' ' << fs << '\n'; */
 }
 
 /* Stuff to look for
