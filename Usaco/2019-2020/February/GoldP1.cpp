@@ -83,7 +83,6 @@ int main() {
         cin >> a >> b >> x;
         adj[a].pb({x, b});
         p[b]++;
-        /* adj[b].pb({x, a}); */
     }
     topo(0);
     for (int i = 1; i <= n; i++) {
