@@ -2,4 +2,4 @@
 
 Still in progress
 
-CSES, Kattis, Codeforces, and Usaco
+CSES, Codeforces, and Usaco
