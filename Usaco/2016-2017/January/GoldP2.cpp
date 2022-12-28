@@ -1,71 +1,56 @@
-#include <bits/stdc++.h>
+#include "bits/stdc++.h"
 using namespace std;
 
-int dist(pair<int, int> a, pair<int, int> b) {
-    int x = a.first-b.first;
-    int y = a.second-b.second;
-    return x*x+y*y;
-}
-
 int main() {
-    ios_base::sync_with_stdio(0); cin.tie(0); 
-    freopen("radio.in","r",stdin);
-    freopen("radio.out","w",stdout);
+    freopen("hps.in", "r", stdin);
+    freopen("hps.out", "w", stdout);
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    // Hoof = 0, Paper = 1, Scissors = 2
 
-    int n, m;
-    cin >> n >> m;
-    int fx, fy, bx, by;
-    cin >> fx >> fy >> bx >> by;
-    string fs, bs;
-    cin >> fs >> bs;
-    vector<pair<int, int>> fv, bv;
-    fv.push_back({fx, fy});
-    bv.push_back({bx, by});
+    auto check = [](int a, int b) {
+        return (a + 1) % 3 == b;
+    };
+
+    int n, k;
+    cin >> n >> k;
+    vector<int> v(n);
     for (int i = 0; i < n; i++) {
-        if (fs[i] == 'N')
-            fy++;
-        else if (fs[i] == 'E')
-            fx++;
-        else if (fs[i] == 'S')
-            fy--;
-        else 
-            fx--;
-        fv.push_back({fx, fy});
+        char c;
+        cin >> c;
+        if (c == 'H')
+            v[i] = 0;
+        else if (c == 'P')
+            v[i] = 1;
+        else if (c == 'S')
+            v[i] = 2;
     }
-    for (int i = 0; i < m; i++) {
-        if (bs[i] == 'N')
-            by++;
-        else if (bs[i] == 'E')
-            bx++;
-        else if (bs[i] == 'S')
-            by--;
-        else 
-            bx--;
-        bv.push_back({bx, by});
-    }
-    int dp[n+1][m+1]; // [index][index] = min energy to get there
+
+    int dp[n + 1][k + 1][3];
     for (int i = 0; i <= n; i++)
-        for (int j = 0; j <= m; j++) 
-            dp[i][j] = 2e9;
-    dp[0][0] = 0;
-    for (int i = 1; i <= n; i++) 
-        dp[i][0] = dp[i-1][0]+dist(fv[i], bv[0]);
-    for (int i = 1; i <= m; i++) 
-        dp[0][i] = dp[0][i-1]+dist(fv[0], bv[i]);
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= m; j++) {
-            dp[i][j] = dist(fv[i], bv[j]);
-            int tmp = min(dp[i-1][j], min(dp[i][j-1], dp[i-1][j-1]));
-            dp[i][j] += tmp;
+        for (int j = 0; j <= k; j++)
+            for (int a = 0; a < 3; a++)
+                dp[i][j][a] = -1e9;
+
+    for (int i = 0; i < 3; i++)
+        dp[0][0][i] = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j <= k; j++) {
+            for (int a = 0; a < 3; a++) {
+                if (j <= k)
+                    dp[i + 1][j][a] = max(dp[i + 1][j][a], dp[i][j][a] + check(v[i], a));
+
+                if (j < k)
+                    for (int b = 0; b < 3; b++)
+                        dp[i + 1][j + 1][b] = max(dp[i + 1][j + 1][b], dp[i][j][a] + check(v[i], b));
+            }
         }
     }
-    cout << dp[n][m] << '\n';
-}
 
-/* Stuff to look for
- * int overflow, array bounds
- * special cases (n=1)
- * do smth instead of nothing and stay organized
- * WRITE STUFF DOWN
- * DON'T GET STUCK ON ONE APPROACH
- */
+    int ans = 0;
+    for (int i = 0; i <= k; i++)
+        for (int j = 0; j < 3; j++)
+            ans = max(ans, dp[n][i][j]);
+    cout << ans << '\n';
+}
