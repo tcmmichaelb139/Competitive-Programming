@@ -1,45 +1,58 @@
-// 11/13 test cases
-#include<bits/stdc++.h>
+#include "bits/stdc++.h"
 using namespace std;
 
-int n, k;
-int v[50002];
-int vadj[50002];
-bool vis[50002];
-vector<int> adj[52];
-
 int main() {
-	ios::sync_with_stdio(0); cin.tie(0);
+    ios::sync_with_stdio(0);
+    cin.tie(0);
 
-	cin >> n >> k;
-	for (int i = 0; i < n; i++) 
-		cin >> v[i];
-	for (int i = 0; i < k; i++) {
-		string s; cin >> s;
-		for (int j = 0; j < k; j++)
-			if (s[j]-'0') {
-				for (int a = 0; a < n; a++) 
-					if (j+1 == v[a]) {
-						adj[i+1].push_back(a);
-					}
-			}
-	}
-	priority_queue<pair<long long, long long>,
-		vector<pair<long long, long long>>,
-		greater<pair<long long, long long>>> q; // dist, index
-	q.push({0, 0});
-	while (!q.empty()) {
-		pair<long long, long long> k = q.top();
-		q.pop();
-		if (k.second == n-1) {
-			cout << k.first << '\n';
-			return 0;
-		}
-		if (vis[k.second]) continue;
-		vis[k.second] = true;
-		for (auto i: adj[v[k.second]]) {
-			q.push({k.first+abs(k.second-i), i});
-		}
-	}
-	cout << -1 << '\n';
+    int n, k;
+    cin >> n >> k;
+    vector<int> b(n + 1);
+    vector<vector<int>> pos(k + 1);
+    vector<vector<int>> adj(k + 1);
+    for (int i = 1; i <= n; i++) {
+        cin >> b[i];
+        pos[b[i]].push_back(i);
+    }
+
+    for (int i = 0; i < k; i++) {
+        string s;
+        cin >> s;
+        for (int j = 0; j < k; j++)
+            if (s[j] == '1')
+                adj[i + 1].push_back(j + 1);
+    }
+
+    vector<int> dist(n + 1, 1e9);
+
+    vector<int> in(n + 1, -1);
+    set<pair<int, int>> s;
+    s.insert({0, 1});
+    in[1] = 0;
+    while (!s.empty()) {
+        pair<int, int> v = *begin(s);
+        s.erase(begin(s));
+
+        if (dist[v.second] <= v.first) continue;
+        dist[v.second] = v.first;
+        if (v.second == n) break;
+
+        for (int i : adj[b[v.second]]) {
+            for (int u : pos[i]) {
+                if (u == v.second) continue;
+                int total = v.first + abs(v.second - u);
+                if (dist[u] <= total)
+                    continue;
+
+                if (in[u] <= total && in[u] != -1)
+                    continue;
+                else if (s.find({in[u], total}) != s.end())
+                    s.erase({in[u], total});
+                s.insert({total, u});
+                in[u] = total;
+            }
+        }
+    }
+
+    cout << (dist[n] == (int)(1e9) ? -1 : dist[n]) << '\n';
 }
