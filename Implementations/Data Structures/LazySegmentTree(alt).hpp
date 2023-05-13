@@ -9,6 +9,10 @@ struct LazySeg {
     const T ID = {0, 0};
     long long cmb(long long a, long long b) { return a + b; }
     T seg[2 * N];
+    LazySeg() {
+        for (int i = 0; i < 2 * N; i++)
+            seg[i] = ID;
+    }
     void push(int p, int L, int R) {
         seg[p].val += (R - L + 1) * seg[p].lzAdd;
         if (L != R) {
@@ -19,7 +23,7 @@ struct LazySeg {
     }
     void pull(int p) { seg[p].val = cmb(seg[2 * p].val, seg[2 * p + 1].val); }
     void build(vector<long long> &v, int p = 1, int L = 0, int R = N - 1) {
-        seg[p].lzAdd = ID.val;
+        seg[p].lzAdd = ID.lzAdd;
         if (L == R) {
             if (size(v) > L)
                 seg[p].val = v[L];
@@ -43,7 +47,7 @@ struct LazySeg {
         upd(lo, hi, inc, 2 * p + 1, M + 1, R);
         pull(p);
     }
-    T query(int lo, int hi, int p = 1, int L = 0, int R = N - 1) {
+    long long query(int lo, int hi, int p = 1, int L = 0, int R = N - 1) {
         push(p, L, R);
         if (lo > R || L > hi) return ID.val;
         if (lo <= L && R <= hi) return seg[p].val;
